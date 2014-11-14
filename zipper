@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+
+ignored = [
+  "*.tm_properties*", 
+  "*.DS_Store*", 
+  "*.git*",
+  "*.sass-cache*", 
+  "*.svn*",
+  "*assets*",
+  "*branches*",
+  "*coffeescript*", 
+  "*php/includes*", 
+  "*node_modules*", 
+  "*scss*", 
+  "*tags*",
+  "*tmp*",
+  "*trunk*",
+  "cta.js*",
+  "Gruntfile.js*", 
+  "latest.zip", 
+  "package.json*", 
+  "zipper"
+].map{ |i| "-x '../simplerestrict/#{i}'" }.join(" ")
+
+debug_true = "const debug = true;"
+debug_false = "const debug = false;"
+show_errors = "ini_set(\"display_errors\",1);\nini_set(\"display_startup_errors\",1);\nerror_reporting(-1);"
+hide_errors = "/*\nini_set(\"display_errors\",1);\nini_set(\"display_startup_errors\",1);\nerror_reporting(-1);\n*/"
+
+File.open("simplerestrict.php") { |file|
+  contents = file.read.gsub debug_true, debug_false
+  contents = contents.gsub show_errors, hide_errors
+  File.open("simplerestrict.php", "w") { |f| f << contents }
+}
+
+`zip -r simplerestrict.zip ../simplerestrict #{ignored}`
+`rm -rf trunk`
+`rm -rf simplerestrict`
+`unzip simplerestrict.zip`
+`mv simplerestrict trunk`
+
+File.open("simplerestrict.php") { |file|
+  contents = file.read.gsub debug_false, debug_true
+  contents = contents.gsub hide_errors, show_errors
+  File.open("simplerestrict.php", "w") { |f| f << contents }
+}
