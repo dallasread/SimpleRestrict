@@ -19,7 +19,8 @@ ignored = [
   "Gruntfile.js*", 
   "latest.zip", 
   "package.json*", 
-  "zipper"
+  "zipper",
+  "ignoring.txt"
 ].map{ |i| "-x '../simplerestrict/#{i}'" }.join(" ")
 
 debug_true = "const debug = true;"

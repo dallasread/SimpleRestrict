@@ -1,6 +1,7 @@
 .svn
 trunk
 branches
+tags
 trunk
 *.zip
 assets
