@@ -146,12 +146,22 @@ class SimpleRestrict {
 		
 		if (isset($attrs["only"])) {
 			$roles = array_map('trim', explode(',', $attrs["only"]));
-			$allowed = !empty(array_intersect($roles, $user_roles));
+			
+			if (array_intersect($roles, $user_roles)) {
+				$allowed = true;
+			} else {
+				$allowed = false;
+			}
 		}
 		
 		if (isset($attrs["except"])) {
 			$roles = array_map('trim', explode(',', $attrs["except"]));
-			$allowed = empty(array_intersect($roles, $user_roles));
+			
+			if (!array_intersect($roles, $user_roles)) {
+				$allowed = true;
+			} else {
+				$allowed = false;
+			}
 		}
 		
 		if ($allowed) { echo $content; }
