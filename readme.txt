@@ -1,6 +1,6 @@
 === SimpleRestrict ===
-Version: 1.0.1
-URI: http://simplerestrict.com
+Version: 1.0.2
+URI: http://WPSimpleRestrict.com
 Contributors: dallas22ca
 Author: Dallas Read
 Author URI: http://www.DallasRead.com
@@ -21,18 +21,18 @@ SimpleRestrict allows you to restrict access to specific user roles on a page-by
 
 You can also manage who sees what content on a page using the **[restrict]** shortcode. It takes two attributes: only & except. Each attribute takes a comma separated list of user roles. For example:
 
-**\[restrict only="administrator"\]My Restricted Content\[restrict\]** - only the admin will see "My Restricted Content"
+**\[restrict only="administrator"\]My Restricted Content\[/restrict\]** - only the admin will see "My Restricted Content"
 
-**\[restrict only="administrator,editor"\]My Restricted Content\[restrict\]** - only the admin and editors will see "My Restricted Content**"**
+**\[restrict only="administrator,editor"\]My Restricted Content\[/restrict\]** - only the admin and editors will see "My Restricted Content**"**
 
-**\[restrict only="administrator,editor" except="editor"\]My Restricted Content\[restrict\]** - the only attribute can be overridden by the except attribute (the editor can no longer see the content)
+**\[restrict only="administrator,editor" except="editor"\]My Restricted Content\[/restrict\]** - the only attribute can be overridden by the except attribute (the editor can no longer see the content)
 
 **How do I use SimpleRestrict?**
 
 * Go to the Edit page for the Page or Post you wish to protect (works for all "public" page/post types).
 * On the right sidebar, you'll see the SimpleRestrict box.
 * Check off which roles are allowed to see the page and save. If you want to redirect them to a particular page (eg. login), enter the URL in the Redirect URL field, otherwise it will simply redirect to the home page.
-* Alternatively, use the **[restrict only="editor"]** shortcode.
+* Alternatively, use the **[restrict only="editor"]This is restricted[/restrict]** shortcode.
 
 == Installation ==
 
@@ -45,7 +45,7 @@ You can also manage who sees what content on a page using the **[restrict]** sho
 * Go to the Edit page for the Page or Post you wish to protect (works for all "public" page/post types).
 * On the right sidebar, you'll see the SimpleRestrict meta box.
 * Check off which roles are allowed to see the page and save. If you want to redirect them to a particular page (eg. login), enter the URL in the Redirect URL field, otherwise it will simply redirect to the home page.
-* Alternatively, use the **[restrict only="editor"]** shortcode.
+* Alternatively, use the **[restrict only="editor"]This is restricted[/restrict]** shortcode.
 
 = What if I don't see the SimpleRestrict meta box on the Edit page? =
 * Make sure the plugin is Activated.
@@ -59,6 +59,9 @@ You can also manage who sees what content on a page using the **[restrict]** sho
 1. The SimpleRestrict meta box.
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+* Updated documentation.
 
 = 1.0.1 =
 * Added the [restrict only="administrator,editor" except="public"] shortcode!

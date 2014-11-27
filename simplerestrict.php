@@ -4,7 +4,7 @@
 Plugin Name: SimpleRestrict
 Plugin URI: http://WPSimpleRestrict.com
 Description: SimpleRestrict is a super-simple way to restrict pages and page content by user roles
-Version: 1.0.1
+Version: 1.0.2
 Contributors: dallas22ca
 Author: Dallas Read
 Author URI: http://www.DallasRead.com
@@ -41,7 +41,7 @@ error_reporting(-1);
 
 class SimpleRestrict {
   public static $simplerestrict_instance;
-	const version = "1.0.1";
+	const version = "1.0.2";
 	const debug = true;
 
   public static function init() {
@@ -129,7 +129,7 @@ class SimpleRestrict {
 		<input type="text" name="restrict_roles_redirect" value="<?php echo $redirect; ?>" style="width: 100%; ">
 		
 		<p>
-			Hint: Restrict page content with the <strong>[restrict only="administrator,editor" except="public"]</strong> shortcode!
+			Hint: Restrict page content with the <strong>[restrict only="administrator,editor" except="public"]This is restricted![/restrict]</strong> shortcode!
 		</p>
 			
 	<?php }
@@ -164,7 +164,7 @@ class SimpleRestrict {
 			}
 		}
 		
-		if ($allowed) { echo $content; }
+		return $allowed ? $content : "";
 	}
 }
 
