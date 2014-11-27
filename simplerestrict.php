@@ -2,15 +2,15 @@
 /*
 
 Plugin Name: SimpleRestrict
-Plugin URI: http://SimpleRestrict.guru
-Description: SimpleRestrict is a suite of high-converting tools that help you to engage your visitors, personalize customer connections, and boost your profits.
-Version: 1.0.0
+Plugin URI: http://WPSimpleRestrict.com
+Description: SimpleRestrict is a super-simple way to restrict pages and page content by user roles
+Version: 1.0.1
 Contributors: dallas22ca
 Author: Dallas Read
 Author URI: http://www.DallasRead.com
 Text Domain: simplerestrict
 Requires at least: 3.6
-Tested up to: 4.0
+Tested up to: 4.0.1
 Stable tag: trunk
 License: MIT
 
@@ -41,8 +41,7 @@ error_reporting(-1);
 
 class SimpleRestrict {
   public static $simplerestrict_instance;
-	const version = "1.0.0";
-	const db = 1.0;
+	const version = "1.0.1";
 	const debug = true;
 
   public static function init() {
@@ -55,6 +54,7 @@ class SimpleRestrict {
 		add_action( "send_headers" , array($this, "no_cache_headers") );
 		add_action( "add_meta_boxes" , array($this, "add_meta_box") );
 		add_action( "save_post", array($this, "save_meta_box") );
+		add_shortcode( "restrict", array($this, "restrict_shortcode") );
   }
 	
 	public static function no_cache_headers() {
@@ -123,12 +123,39 @@ class SimpleRestrict {
 		<?php foreach ($roles as $key => $value) { ?>
 			<input type="checkbox"<?php if (in_array($key, $page_roles)) { ?>checked="checked"<?php } ?> name="restrict_roles[]" id="restrict_roles_<?php echo $key; ?>" value="<?php echo $key; ?>"> <label for="restrict_roles_<?php echo $key; ?>"><?php echo $value; ?></label><br>
 		<?php } ?>
-		<input type="checkbox"<?php if (in_array("public", $page_roles)) { ?>checked="checked"<?php } ?> name="restrict_roles[]" id="restrict_roles_public" value="public"> <label for="restrict_roles_public">Public</label><br>
+		<input type="checkbox"<?php if (in_array("public", $page_roles)) { ?>checked="checked"<?php } ?> name="restrict_roles[]" id="restrict_roles_public" value="public"> <label for="restrict_roles_public">Public (Not logged in)</label><br>
 		
 		<p>Where should they be redirected?</p>
 		<input type="text" name="restrict_roles_redirect" value="<?php echo $redirect; ?>" style="width: 100%; ">
+		
+		<p>
+			Hint: Restrict page content with the <strong>[restrict only="administrator,editor" except="public"]</strong> shortcode!
+		</p>
 			
 	<?php }
+	
+	public static function restrict_shortcode( $attrs, $content = null ) {
+		$allowed = false;
+		
+		if (is_user_logged_in()) {
+			$user = wp_get_current_user();
+			$user_roles = $user->roles;
+		} else {
+			$user_roles = array("public");
+		}
+		
+		if (isset($attrs["only"])) {
+			$roles = array_map('trim', explode(',', $attrs["only"]));
+			$allowed = !empty(array_intersect($roles, $user_roles));
+		}
+		
+		if (isset($attrs["except"])) {
+			$roles = array_map('trim', explode(',', $attrs["except"]));
+			$allowed = empty(array_intersect($roles, $user_roles));
+		}
+		
+		if ($allowed) { echo $content; }
+	}
 }
 
 SimpleRestrict::init();
