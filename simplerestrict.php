@@ -70,14 +70,13 @@ class SimpleRestrict {
 		$page_roles = get_post_meta( $post->ID, "restrict_roles", true );
     
 		if (is_user_logged_in()) {
-			$user = wp_get_current_user();
-			$user_roles = (array) $user->roles;
-			$user_role = array_shift($user_roles);
-		} else {
-			$user_role = "public";
-		}
-		
-		if ($page_roles && !in_array($user_role, $page_roles)) {
+                        $user = wp_get_current_user();
+                        $user_roles = (array) $user->roles;
+                } else {
+                        $user_roles = array("public");
+                }
+
+                if ($page_roles && !array_intersect($page_roles, $user_roles)) {
 			$redirect = get_post_meta( $post->ID, "restrict_roles_redirect", true );
 			if (!$redirect || $redirect == "") { $redirect = home_url("/"); }
 			wp_redirect( $redirect );
