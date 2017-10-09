@@ -163,7 +163,7 @@ class SimpleRestrict {
 			}
 		}
 		
-		return $allowed ? $content : "";
+		return $allowed ? apply_filters('the_content', $content) : "";
 	}
 }
 
