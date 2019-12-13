@@ -213,7 +213,40 @@ class SimpleRestrict {
             });
         </script>
             
-    <?php }
+   <?php }
+	
+	public static function restrict_shortcode( $attrs, $content = null ) {
+		$allowed = false;
+		
+		if (is_user_logged_in()) {
+			$user = wp_get_current_user();
+			$user_roles = $user->roles;
+		} else {
+			$user_roles = array("public");
+		}
+		
+		if (isset($attrs["only"])) {
+			$roles = array_map('trim', explode(',', $attrs["only"]));
+			
+			if (array_intersect($roles, $user_roles)) {
+				$allowed = true;
+			} else {
+				$allowed = false;
+			}
+		}
+		
+		if (isset($attrs["except"])) {
+			$roles = array_map('trim', explode(',', $attrs["except"]));
+			
+			if (!array_intersect($roles, $user_roles)) {
+				$allowed = true;
+			} else {
+				$allowed = false;
+			}
+		}
+		
+		return $allowed ? apply_filters('the_content', $content) : "";
+	}
 }
 
 SimpleRestrict::init();
